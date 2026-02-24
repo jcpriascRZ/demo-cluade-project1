@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { createWorkoutAction } from "./actions";
 
 export function WorkoutForm({ initialDate }: { initialDate: Date }) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [date, setDate] = useState<Date>(initialDate);
   const [pending, setPending] = useState(false);
@@ -19,7 +21,7 @@ export function WorkoutForm({ initialDate }: { initialDate: Date }) {
     e.preventDefault();
     setPending(true);
     await createWorkoutAction(name, date);
-    setPending(false);
+    router.push("/dashboard");
   }
 
   return (

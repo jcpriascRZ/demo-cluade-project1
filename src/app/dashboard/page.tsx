@@ -1,8 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { format } from "date-fns";
+import Link from "next/link";
+import { PlusIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { DatePicker } from "./date-picker";
-import { LogWorkoutButton } from "./log-workout-button";
 import { getWorkoutsForUser } from "@/data/workouts";
 
 export default async function DashboardPage({
@@ -30,7 +32,15 @@ export default async function DashboardPage({
         </h2>
 
         {workouts.length === 0 ? (
-          <LogWorkoutButton date={date} />
+          <div className="flex flex-col items-start gap-3">
+            <p className="text-muted-foreground text-sm">No workouts logged for this date.</p>
+            <Button asChild variant="outline" size="sm" className="gap-2">
+              <Link href={`/dashboard/workout/new?date=${format(date, "yyyy-MM-dd")}`}>
+                <PlusIcon className="h-4 w-4" />
+                Log Workout
+              </Link>
+            </Button>
+          </div>
         ) : (
           workouts.map((workout) => (
             <Card key={workout.id}>

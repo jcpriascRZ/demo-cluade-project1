@@ -107,6 +107,26 @@ export async function createWorkoutAction(name: string, date: Date) {
 
 If validation fails, `z.parse()` will throw automatically and the action will not proceed. Use `safeParse()` if you need to return a structured error to the UI instead of throwing.
 
+## Redirects After Mutations
+
+**`redirect()` must NOT be called inside server actions.** Navigation after a mutation is the responsibility of the client.
+
+After awaiting a server action in a Client Component, use Next.js's `useRouter` to redirect:
+
+```ts
+// ❌ Forbidden
+export async function createWorkoutAction(name: string, date: Date) {
+  await createWorkout(userId, name, date);
+  redirect("/dashboard"); // never do this
+}
+
+// ✅ Required — redirect in the Client Component after the action resolves
+async function handleSubmit() {
+  await createWorkoutAction(name, date);
+  router.push("/dashboard");
+}
+```
+
 ## Summary
 
 | Concern | Requirement |
@@ -118,3 +138,4 @@ If validation fails, `z.parse()` will throw automatically and the action will no
 | Database calls | Drizzle ORM via `src/data/` helper functions only |
 | Raw SQL | Strictly forbidden |
 | User data writes | Always scoped to the authenticated user's ID |
+| Redirects after mutations | Client-side via `useRouter` — `redirect()` is forbidden in server actions |
