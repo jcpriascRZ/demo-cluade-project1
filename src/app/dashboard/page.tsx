@@ -27,20 +27,20 @@ export default async function DashboardPage({
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold">
-          Workouts for {format(date, "do MMM yyyy")}
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            Workouts for {format(date, "do MMM yyyy")}
+          </h2>
+          <Button asChild variant="outline" size="sm" className="gap-2">
+            <Link href={`/dashboard/workout/new?date=${format(date, "yyyy-MM-dd")}`}>
+              <PlusIcon className="h-4 w-4" />
+              Log Workout
+            </Link>
+          </Button>
+        </div>
 
         {workouts.length === 0 ? (
-          <div className="flex flex-col items-start gap-3">
-            <p className="text-muted-foreground text-sm">No workouts logged for this date.</p>
-            <Button asChild variant="outline" size="sm" className="gap-2">
-              <Link href={`/dashboard/workout/new?date=${format(date, "yyyy-MM-dd")}`}>
-                <PlusIcon className="h-4 w-4" />
-                Log Workout
-              </Link>
-            </Button>
-          </div>
+          <p className="text-muted-foreground text-sm">No workouts logged for this date.</p>
         ) : (
           workouts.map((workout) => (
             <Link key={workout.id} href={`/dashboard/workout/${workout.id}`}>
